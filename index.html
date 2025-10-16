@@ -310,7 +310,7 @@
         
         /* Footer */
         .footer {
-            padding: 20px 50px 30px;
+            padding: 20px 50px 40px;
             border-top: 2px solid #e0e0e0;
         }
         
@@ -573,7 +573,9 @@
                     logging: false,
                     backgroundColor: '#ffffff',
                     windowWidth: 816, // 8.5 inches at 96 DPI
-                    windowHeight: element.scrollHeight
+                    windowHeight: element.scrollHeight,
+                    height: element.scrollHeight,
+                    y: 0
                 });
 
                 // Create PDF
@@ -587,8 +589,31 @@
 
                 const imgWidth = 8.5;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // Calculate if we need multiple pages
+                const pageHeight = 11; // Letter size height in inches
+                let heightLeft = imgHeight;
+                let position = 0;
 
-                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight, '', 'FAST');
+                // Add first page
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+
+                // If content is taller than one page, ensure it fits
+                if (imgHeight > pageHeight) {
+                    // Content is tall, but we'll scale it to fit on one page
+                    const scale = pageHeight / imgHeight;
+                    const scaledHeight = pageHeight;
+                    const scaledWidth = imgWidth * scale;
+                    const xOffset = (8.5 - scaledWidth) / 2;
+                    
+                    // Clear and re-add with scaling
+                    pdf = new jsPDF({
+                        orientation: 'portrait',
+                        unit: 'in',
+                        format: 'letter'
+                    });
+                    pdf.addImage(imgData, 'PNG', xOffset, 0, scaledWidth, scaledHeight, '', 'FAST');
+                }
 
                 // Generate filename
                 const companyName = document.getElementById('displayCompany').textContent.replace(/[^a-z0-9]/gi, '-');
