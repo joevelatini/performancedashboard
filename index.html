@@ -73,6 +73,13 @@
             border-color: #2563a8;
         }
 
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
         .generate-btn {
             background: linear-gradient(135deg, #2563a8 0%, #3da5d9 100%);
             color: white;
@@ -84,8 +91,6 @@
             cursor: pointer;
             font-family: 'Lexend', 'Century Gothic', sans-serif;
             transition: transform 0.2s, box-shadow 0.2s;
-            display: block;
-            margin: 0 auto;
         }
 
         .generate-btn:hover {
@@ -95,6 +100,38 @@
 
         .generate-btn:active {
             transform: translateY(0);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Lexend', 'Century Gothic', sans-serif;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: none;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-btn.show {
+            display: inline-block;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
         }
 
         /* Report Section */
@@ -305,11 +342,14 @@
             color: #ff6b6b;
         }
 
-        .print-instructions {
+        .instructions {
             text-align: center;
             padding: 20px;
             color: #666;
             font-size: 14px;
+            background: #f0f9ff;
+            border-radius: 8px;
+            margin-top: 15px;
         }
 
         @media print {
@@ -318,7 +358,7 @@
                 padding: 0;
             }
             .input-section,
-            .print-instructions {
+            .instructions {
                 display: none !important;
             }
             .report-section {
@@ -377,12 +417,18 @@
                     <input type="text" id="ctaLink" placeholder="https://calendly.com/yourname">
                 </div>
             </div>
-            <button class="generate-btn" onclick="generateReport()">Generate Report</button>
+            <div class="button-group">
+                <button class="generate-btn" onclick="generateReport()">Generate Report</button>
+                <button class="download-btn" id="downloadBtn" onclick="downloadPDF()">📥 Download as PDF</button>
+            </div>
+            <div class="instructions">
+                💡 Fill in the data above, click "Generate Report" to preview, then "Download as PDF" to save your file.
+            </div>
         </div>
 
         <!-- Report Section -->
         <div class="report-section" id="reportSection">
-            <div class="page">
+            <div class="page" id="reportPage">
                 <!-- Header -->
                 <div class="header">
                     <div class="logo">ActivTrak</div>
@@ -446,15 +492,14 @@
                 </div>
             </div>
         </div>
-
-        <div class="print-instructions">
-            After generating your report, use <strong>Ctrl+P</strong> (or <strong>Cmd+P</strong> on Mac) and select "Save as PDF" to create your document.
-        </div>
     </div>
+
+    <!-- Load libraries from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
         function formatCurrency(value) {
-            // Remove any non-numeric characters except decimal point
             const num = parseFloat(value.replace(/[^0-9.]/g, ''));
             if (isNaN(num)) return '$0';
             return '$' + num.toLocaleString('en-US', { maximumFractionDigits: 0 });
@@ -498,8 +543,71 @@
                 footerCta.innerHTML = 'Let\'s discuss how to address these findings and improve your ROI →';
             }
 
+            // Show download button
+            document.getElementById('downloadBtn').classList.add('show');
+
             // Scroll to report
             document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function downloadPDF() {
+            const button = document.getElementById('downloadBtn');
+            const originalText = button.innerHTML;
+            
+            // Show loading state
+            button.innerHTML = '⏳ Generating PDF...';
+            button.classList.add('loading');
+
+            try {
+                const element = document.getElementById('reportPage');
+                
+                // Generate canvas with high quality
+                const canvas = await html2canvas(element, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff',
+                    windowWidth: 816, // 8.5 inches at 96 DPI
+                    windowHeight: element.scrollHeight
+                });
+
+                // Create PDF
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'in',
+                    format: 'letter'
+                });
+
+                const imgWidth = 8.5;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight, '', 'FAST');
+
+                // Generate filename
+                const companyName = document.getElementById('displayCompany').textContent.replace(/[^a-z0-9]/gi, '-');
+                const dateRange = document.getElementById('displayDate').textContent.replace(/[^a-z0-9]/gi, '-');
+                const filename = `ActivTrak-ROI-Report-${companyName}-${dateRange}.pdf`;
+
+                // Save PDF
+                pdf.save(filename);
+
+                // Reset button
+                button.innerHTML = '✅ Downloaded!';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('loading');
+                }, 2000);
+
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                button.innerHTML = '❌ Error - Try Again';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('loading');
+                }, 2000);
+            }
         }
 
         // Allow Enter key to generate report
