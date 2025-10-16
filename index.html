@@ -59,6 +59,10 @@
             font-size: 14px;
         }
 
+        .form-group input::placeholder {
+            font-style: italic;
+        }
+        
         .form-group input {
             padding: 12px;
             border: 2px solid #e0e0e0;
@@ -378,43 +382,43 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label for="companyName">Company Name</label>
-                    <input type="text" id="companyName" placeholder="Acme Corporation">
+                    <input type="text" id="companyName" placeholder="Example: Acme Corporation">
                 </div>
                 <div class="form-group">
                     <label for="dateRange">Date Range</label>
-                    <input type="text" id="dateRange" placeholder="Q3 2025">
+                    <input type="text" id="dateRange" placeholder="Example: Q3 2025">
                 </div>
                 <div class="form-group">
                     <label for="productivityLoss">Monthly Productivity Loss ($)</label>
-                    <input type="text" id="productivityLoss" placeholder="25000">
+                    <input type="text" id="productivityLoss" placeholder="Example: 25000">
                 </div>
                 <div class="form-group">
                     <label for="falseActivity">Potential False Activity (instances)</label>
-                    <input type="text" id="falseActivity" placeholder="147">
+                    <input type="text" id="falseActivity" placeholder="Example: 147">
                 </div>
                 <div class="form-group">
                     <label for="highDuration">High Duration Activity (instances)</label>
-                    <input type="text" id="highDuration" placeholder="89">
+                    <input type="text" id="highDuration" placeholder="Example: 89">
                 </div>
                 <div class="form-group">
                     <label for="unproductiveHours">Unproductive Site Time (hours)</label>
-                    <input type="text" id="unproductiveHours" placeholder="2345">
+                    <input type="text" id="unproductiveHours" placeholder="Example: 2345">
                 </div>
                 <div class="form-group">
                     <label for="productivityPercent">% Below Productivity Target</label>
-                    <input type="text" id="productivityPercent" placeholder="42">
+                    <input type="text" id="productivityPercent" placeholder="Example: 42">
                 </div>
                 <div class="form-group">
                     <label for="productivityGoal">Productivity Goal (hours)</label>
-                    <input type="text" id="productivityGoal" placeholder="6">
+                    <input type="text" id="productivityGoal" placeholder="Example: 6">
                 </div>
                 <div class="form-group">
                     <label for="groupName">Largest Opportunity Group</label>
-                    <input type="text" id="groupName" placeholder="Sales">
+                    <input type="text" id="groupName" placeholder="Example: Sales">
                 </div>
                 <div class="form-group">
                     <label for="ctaLink">CSM Email</label>
-                    <input type="email" id="ctaLink" placeholder="joe@activtrak.com">
+                    <input type="email" id="ctaLink" placeholder="Example: joe@activtrak.com">
                 </div>
             </div>
             <div class="button-group">
@@ -520,7 +524,8 @@
             const highDuration = document.getElementById('highDuration').value;
             const unproductiveHours = document.getElementById('unproductiveHours').value;
             const productivityPercent = document.getElementById('productivityPercent').value;
-            const productivityGoal = document.getElementById('productivityGoal').value || 'X';
+            const productivityGoal = document.getElementById('productivityGoal').value;
+            const displayGoal = productivityGoal || '6';
             const groupName = document.getElementById('groupName').value || '[Group Name]';
             const ctaLink = document.getElementById('ctaLink').value;
 
@@ -532,7 +537,7 @@
             document.getElementById('displayDuration').textContent = formatNumber(highDuration);
             document.getElementById('displayHours').textContent = formatNumber(unproductiveHours);
             document.getElementById('displayPercent').textContent = productivityPercent ? productivityPercent + '%' : 'XX%';
-            document.getElementById('displayGoal').textContent = productivityGoal;
+            document.getElementById('displayGoal').textContent = displayGoal;
             document.getElementById('displayGroup').textContent = groupName + ' Team';
 
             // Update footer CTA with email link if provided
