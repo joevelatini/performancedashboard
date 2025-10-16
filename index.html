@@ -245,7 +245,7 @@
         }
         
         .stat-label {
-            font-size: 13px;
+            font-size: 14px;
             color: #666;
             font-weight: 600;
             text-transform: uppercase;
@@ -413,8 +413,8 @@
                     <input type="text" id="groupName" placeholder="Sales">
                 </div>
                 <div class="form-group">
-                    <label for="ctaLink">Footer CTA Link (optional)</label>
-                    <input type="text" id="ctaLink" placeholder="https://calendly.com/yourname">
+                    <label for="ctaLink">CSM Email</label>
+                    <input type="email" id="ctaLink" placeholder="joe@activtrak.com">
                 </div>
             </div>
             <div class="button-group">
@@ -535,10 +535,10 @@
             document.getElementById('displayGoal').textContent = productivityGoal;
             document.getElementById('displayGroup').textContent = groupName + ' Team';
 
-            // Update footer CTA with link if provided
+            // Update footer CTA with email link if provided
             const footerCta = document.getElementById('footerCta');
             if (ctaLink) {
-                footerCta.innerHTML = '<a href="' + ctaLink + '" target="_blank">Let\'s discuss how to address these findings and improve your ROI →</a>';
+                footerCta.innerHTML = 'Let\'s discuss how to address these findings and improve your ROI → <a href="mailto:' + ctaLink + '">' + ctaLink + '</a>';
             } else {
                 footerCta.innerHTML = 'Let\'s discuss how to address these findings and improve your ROI →';
             }
