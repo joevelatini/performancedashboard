@@ -397,7 +397,7 @@
                     <div class="alert-banner">
                         <div class="alert-title">⚠ Estimated Monthly Productivity Loss</div>
                         <div class="alert-amount" id="displayLoss">$X,XXX</div>
-                        <div class="alert-subtitle">Across the organization based on detected patterns</div>
+                        <div class="alert-subtitle">Across the organization based on productivity goals</div>
                     </div>
                     
                     <!-- Stats Grid -->
@@ -440,7 +440,7 @@
                         This report identifies productivity patterns and opportunities discovered through ActivTrak's workforce analytics. 
                         These insights can help optimize team performance and maximize your technology investment.
                     </div>
-                    <div class="footer-cta">
+                    <div class="footer-cta" id="footerCta">
                         Let's discuss how to address these findings and improve your ROI →
                     </div>
                 </div>
@@ -477,6 +477,7 @@
             const productivityPercent = document.getElementById('productivityPercent').value;
             const productivityGoal = document.getElementById('productivityGoal').value || 'X';
             const groupName = document.getElementById('groupName').value || '[Group Name]';
+            const ctaLink = document.getElementById('ctaLink').value;
 
             // Update display values
             document.getElementById('displayCompany').textContent = companyName;
@@ -488,6 +489,14 @@
             document.getElementById('displayPercent').textContent = productivityPercent ? productivityPercent + '%' : 'XX%';
             document.getElementById('displayGoal').textContent = productivityGoal;
             document.getElementById('displayGroup').textContent = groupName + ' Team';
+
+            // Update footer CTA with link if provided
+            const footerCta = document.getElementById('footerCta');
+            if (ctaLink) {
+                footerCta.innerHTML = '<a href="' + ctaLink + '" target="_blank">Let\'s discuss how to address these findings and improve your ROI →</a>';
+            } else {
+                footerCta.innerHTML = 'Let\'s discuss how to address these findings and improve your ROI →';
+            }
 
             // Scroll to report
             document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
