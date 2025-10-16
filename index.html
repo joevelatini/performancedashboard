@@ -229,6 +229,17 @@
             color: #555;
             margin-top: 8px;
         }
+
+        .stat-description a {
+            color: #2563a8;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-bottom 0.2s;
+        }
+
+        .stat-description a:hover {
+            border-bottom: 1px solid #2563a8;
+        }
         
         /* Opportunity Callout */
         .opportunity-box {
@@ -270,9 +281,19 @@
         
         .footer-cta {
             font-size: 12px;
-            color: #2563a8;
             font-weight: 600;
             margin-top: 8px;
+        }
+
+        .footer-cta a {
+            color: #2563a8;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: border-bottom 0.2s;
+        }
+
+        .footer-cta a:hover {
+            border-bottom: 2px solid #2563a8;
         }
         
         /* Warning indicator for productivity goal */
@@ -351,6 +372,10 @@
                     <label for="groupName">Largest Opportunity Group</label>
                     <input type="text" id="groupName" placeholder="Sales">
                 </div>
+                <div class="form-group">
+                    <label for="ctaLink">Footer CTA Link (optional)</label>
+                    <input type="text" id="ctaLink" placeholder="https://calendly.com/yourname">
+                </div>
             </div>
             <button class="generate-btn" onclick="generateReport()">Generate Report</button>
         </div>
@@ -380,25 +405,25 @@
                         <div class="stat-card">
                             <div class="stat-label">🚨 Potential False Activity</div>
                             <div class="stat-value" id="displayFalse">XXX</div>
-                            <div class="stat-description">Instances detected requiring review</div>
+                            <div class="stat-description"><a href="https://support.activtrak.com/hc/en-us/articles/4406765537563-Detect-Mouse-Jigglers-and-Activity-Mimicking-Tools" target="_blank">Instances detected requiring review</a></div>
                         </div>
                         
                         <div class="stat-card">
                             <div class="stat-label">⏱ High Duration Activity</div>
                             <div class="stat-value" id="displayDuration">XXX</div>
-                            <div class="stat-description">Extended sessions flagged for analysis</div>
+                            <div class="stat-description"><a href="https://support.activtrak.com/hc/en-us/articles/4406765537563-Detect-Mouse-Jigglers-and-Activity-Mimicking-Tools#highdurationactivity" target="_blank">Extended sessions flagged for analysis</a></div>
                         </div>
                         
                         <div class="stat-card">
                             <div class="stat-label">🌐 Unproductive Site Time</div>
                             <div class="stat-value" id="displayHours">X,XXX</div>
-                            <div class="stat-description">Hours spent on unproductive sites</div>
+                            <div class="stat-description"><a href="https://support.activtrak.com/hc/en-us/articles/360030904192-Website-Usage-Top-Websites" target="_blank">Hours spent on unproductive sites</a></div>
                         </div>
                         
                         <div class="stat-card warning-stat">
                             <div class="stat-label">📊 Below Productivity Target</div>
                             <div class="stat-value" id="displayPercent">XX%</div>
-                            <div class="stat-description">Of workforce missing <span id="displayGoal">X</span>-hour productivity goal</div>
+                            <div class="stat-description"><a href="https://support.activtrak.com/hc/en-us/articles/17686020823963-Productivity-Achievement-Activity-Breakdown" target="_blank">Of workforce missing <span id="displayGoal">X</span>-hour productivity goal</a></div>
                         </div>
                     </div>
                     
